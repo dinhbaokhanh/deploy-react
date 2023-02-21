@@ -1,0 +1,20 @@
+.player {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+
+.player svg {
+    color: darkgray;
+}
+
+.player svg:hover {
+    transition: 0.2s ease-in-out;    
+    color: white;
+}
+
+.previous, .next, .state svg{
+    font-size: 30px;
+    color: white;
+}

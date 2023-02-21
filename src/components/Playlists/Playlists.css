@@ -1,0 +1,35 @@
+.playlists {
+    height: 100%;
+    overflow: hidden;
+}
+
+.playlists ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 18px;
+    max-height: 100%;
+    overflow: auto;
+}
+
+.playlists ul::-webkit-scrollbar {
+    width: 10px;
+}
+
+.playlists ul::-webkit-scrollbar-thumb {
+    background-color: azure;
+}
+
+.playlists ul li {
+    display: flex;
+    gap: 18px;
+    cursor: pointer;
+    color: #b3b3b3;
+    margin-left: 10px;
+}
+
+.playlists ul li:hover {
+    color: white;
+    transition: 0.3s ease-in-out;
+}

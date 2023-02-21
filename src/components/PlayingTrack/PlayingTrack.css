@@ -1,0 +1,25 @@
+.track {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.track .track-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.track .track-info h4{
+    font-size: 13.5px;
+    color: white;
+    font-family: CircularSp,CircularSp-Arab,CircularSp-Hebr,CircularSp-Cyrl,CircularSp-Grek,CircularSp-Deva,var(--fallback-fonts,sans-serif),sans-serif;
+    font-weight: lighter;
+}
+
+.track .track-info h6 {
+    color: #b3b3b3;
+    font-size: 14px;
+    font-family: CircularSp,CircularSp-Arab,CircularSp-Hebr,CircularSp-Cyrl,CircularSp-Grek,CircularSp-Deva,var(--fallback-fonts,sans-serif),sans-serif;
+    font-weight: lighter;
+}
