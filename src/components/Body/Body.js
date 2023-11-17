@@ -7,18 +7,17 @@ import { reducerCases } from '../../utils/Constants';
 
 export default function Body() {
   const [{ token, selectedPlaylistId, selectedPlaylist }, dispatch ] = useStateProvider();
-  useEffect (() => {
-    const getCurrentPlaylist = async () => {
+  useEffect(() => {
+    const getInitialPlaylist = async () => {
       const response = await axios.get(
         `https://api.spotify.com/v1/playlists/${selectedPlaylistId}`,
         {
           headers: {
-            Authorization:'Bearer '+ token,
-            'Content-Type': 'application/json',
+            Authorization: "Bearer " + token,
+            "Content-Type": "application/json",
           },
         }
       );
-      
       const selectedPlaylist = {
         id: response.data.id,
         name: response.data.name,
@@ -33,13 +32,51 @@ export default function Body() {
           image: track.album.images[2].url,
           duration: track.duration_ms,
           album: track.album.name,
+          context_uri: track.album.uri,
+          track_number: track.track_number,
         })),
       };
-      dispatch({type: reducerCases.SET_PLAYLIST, selectedPlaylist})
+      dispatch({ type: reducerCases.SET_PLAYLIST, selectedPlaylist });
     };
-    getCurrentPlaylist();
-    
+    getInitialPlaylist();
   }, [token, dispatch, selectedPlaylistId]);
+  const playTrack = async (
+    id,
+    name,
+    artists,
+    image,
+    context_uri,
+    track_number
+  ) => {
+    const response = await axios.put(
+      `https://api.spotify.com/v1/me/player/play`,
+      {
+        context_uri,
+        offset: {
+          position: track_number - 1,
+        },
+        position_ms: 0,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+    if (response.status === 204) {
+      const currentlyPlaying = {
+        id,
+        name,
+        artists,
+        image,
+      };
+      dispatch({ type: reducerCases.SET_PLAYING, currentlyPlaying });
+      dispatch({ type: reducerCases.SET_PLAYER_STATE, playerState: true });
+    } else {
+      dispatch({ type: reducerCases.SET_PLAYER_STATE, playerState: true });
+    }
+  };
 
   const time = (ms) => {
     const minutes = Math.floor(ms/60000);
@@ -102,9 +139,15 @@ export default function Body() {
                     image,
                     duration,
                     album,
+                    context_uri,
+                    track_number
                   },index) => {
                       return (
-                        <div className='row' key={id}>
+                        <div className='row' key={id}
+                            onClick={() => 
+                              playTrack(id, name, artists, image, context_uri, track_number)
+                            }
+                        >
 
                           <div className='col'>
                             <span>{index+1}</span>

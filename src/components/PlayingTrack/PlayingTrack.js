@@ -38,18 +38,18 @@ export default function PlayingTrack() {
 
     <div className='playing-track'>
 
-      { 
-      currentlyPlaying && (
+      {
+        currentlyPlaying && (
 
-        <div className="track">
-          <div className="track-image">
-            <img src={currentlyPlaying.image} alt="currentlyPlaying" />
+          <div className="track">
+            <div className="track-image">
+              <img src={currentlyPlaying.image} alt="currentlyPlaying" />
+            </div>
+            <div className="track-info">
+              <h4>{currentlyPlaying.name}</h4>
+              <h6>{currentlyPlaying.artists.join(", ")}</h6>
+            </div>
           </div>
-          <div className="track-info">
-            <h4>{currentlyPlaying.name}</h4>
-            <h6>{currentlyPlaying.artists.join(", ")}</h6>
-          </div>
-        </div>
 
       )}
         

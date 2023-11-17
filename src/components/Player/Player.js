@@ -10,27 +10,48 @@ import { reducerCases } from '../../utils/Constants';
 export default function Player() {
 
     const [{ token, playerState }, dispatch] = useStateProvider();
+
+    const changeState = async () => {
+        const state = playerState ? "pause" : "play";
+        await axios.put(
+            `https://api.spotify.com/v1/me/player/${state}`,
+            {},
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + token,
+                }
+            }
+        );
+        dispatch({
+            type: reducerCases.SET_PLAYER_STATE,
+            playerState: !playerState,
+            });
+        };
     
     const changeTrack = async (type) => {
         await axios.post(
             `https://api.spotify.com/v1/me/player/${type}`,
             {},
             {
-            headers: {
-                Authorization: "Bearer " + token,
-                "Content-Type": "application/json",
-            }}
+                headers: {
+                    Authorization: "Bearer " + token,
+                    "Content-Type": "application/json",
+                }
+            }
         );
-        
+        dispatch({ type: reducerCases.SET_PLAYER_STATE, playerState: true });
+
         const response = await axios.get(
             "https://api.spotify.com/v1/me/player/currently-playing",
             {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + token,
-            },
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + token,
+                },
             }
         );
+
 
         if (response.data !== "") {
             const currentlyPlaying = {
@@ -39,6 +60,7 @@ export default function Player() {
                 artists: response.data.item.artists.map((artist) => artist.name),
                 image: response.data.item.album.images[2].url,
             };
+            console.log(currentlyPlaying);
             dispatch({ type: reducerCases.SET_PLAYING, currentlyPlaying });
         } else {
             dispatch({ type: reducerCases.SET_PLAYING, currentlyPlaying: null });
@@ -58,7 +80,7 @@ export default function Player() {
             </div>
 
             <div className='state'>
-                {playerState ? <BsFillPauseCircleFill /> : <BsFillPlayCircleFill/>}
+                {playerState ? (<BsFillPauseCircleFill onClick={changeState}/>) : (<BsFillPlayCircleFill onClick={changeState}/>)}
             </div>
 
             <div className='next'>
